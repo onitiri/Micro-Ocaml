@@ -113,9 +113,17 @@ let tokenize input =
         Tok_DoubleSemi::(tok (pos+2) s)
       else if (Str.string_match re_semi s pos) then
         Tok_Semi::(tok (pos+1) s)
+
+
+        
       else if (Str.string_match re_string s pos) then
         let token = Str.matched_string s in
-        (Tok_String token)::(tok (pos + (String.length token)) s)
+        let tokenWithout = String.sub token 1 (String.length token - 2) in
+        (Tok_String tokenWithout)::(tok (pos + (String.length token)) s)
+        (* (Tok_String token)::(tok (pos + (String.length token)) s) *)
+
+
+
       else if (Str.string_match re_bool s pos) then
         let token = Str.matched_string s in
         (Tok_Bool (str_to_bool token))::(tok (pos + (String.length token)) s)

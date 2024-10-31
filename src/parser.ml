@@ -283,6 +283,11 @@ and parse_DefMutop toks =
   (toks4, Def (id, exp))
 
 and parse_ExprMutop toks = 
-  let toks1, exp = parse_expr toks in
-  let toks2 = match_token toks1 Tok_DoubleSemi in
-  (toks2, Expr exp)
+  match lookahead toks with
+  Some Tok_DoubleSemi -> ([],NoOp)
+  |_ ->
+  ( 
+    let toks1, exp = parse_expr toks in
+    let toks2 = match_token toks1 Tok_DoubleSemi in
+    (toks2, Expr exp)
+    )
